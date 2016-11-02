@@ -21,8 +21,7 @@ public class defj{
    	
       firstName = getString("first name", scan);
       lastName = getString("last name", scan);
-      val1 = getInt(scan);
-      val2 = getInt(scan);
+      int[]numbers = readNum(scan);
       inFileName = getFileName("input", scan);
       outFileName = getFileName("output", scan);
       getPassword(scan);
@@ -59,35 +58,83 @@ public class defj{
 	/**
 	* Integers
 	*/
-   public static long getInt(Scanner scan){
-   	
-      BigInteger bigInt;
-      long val = 0;
-      boolean done = false;
-   	
-   	
-      while(!done){
-      	
-         System.out.print("Please enter a value: ");
-      	
-         try{
-         	
-            bigInt = BigInteger.valueOf(scan.nextInt());
-         		
-            if(bigInt.bitLength() > 31) throw new IllegalArgumentException();
-         		
-            val = bigInt.longValue();
-            done = true;
-         }
-         catch(Exception e){
-         	
-            System.out.print("Invalid input:");
-            System.out.println("Expected 32 bit integer.");
-         }
-      }
-   	
-      return val;
-   }
+  
+	private static int[] readNum(Scanner kb)
+	{
+		int [] numbers = new int[2];
+		int temp;
+		
+		do
+		{ 
+			System.out.println("Enter Your first 32bit Number");
+			while(!kb.hasNextInt())
+			{
+				System.out.println("Enter Your first 32bit Number");
+				kb.next();
+			}
+			
+			temp = kb.nextInt();
+			
+			numbers[0] = temp;
+			
+			System.out.println("Enter Your second 32bit Number");
+			while(!kb.hasNextInt())
+			{
+				System.out.println("Enter Your second 32bit Number");
+				kb.next();
+			}
+			
+			temp = kb.nextInt();
+			numbers[1] = temp;
+			
+		
+		}while(!check(numbers));
+		
+		
+		return numbers;
+	}
+
+	private static boolean check(int[] numbers)
+	{
+		if(numbers[0]>=0 && numbers[1]>=0)
+		{
+			if(numbers[0] + numbers[1] < 0)
+			{
+				System.out.println("Number combinations are invalid");
+				return false;
+			}
+			else if(numbers[0] * numbers[1] < 0)
+			{
+				System.out.println("Number combinations are invalid");
+				return false;
+			}
+		}
+		
+		else if(numbers[0]<=0 && numbers[1]<=0)
+		{
+			if(numbers[0] + numbers[1] > 0)
+			{
+				System.out.println("Number combinations are invalid");
+				return false;
+			}
+			else if(numbers[0] * numbers[1] < 0)
+			{
+				System.out.println("Number combinations are invalid");
+				return false;
+			}
+		}
+		
+		else if(numbers[0]<=0 && numbers[1]>=0 || numbers[0]>=0 && numbers[1]<=0)
+		{
+			 if(numbers[0] * numbers[1] >= 0)
+			{
+				System.out.println("Number combinations are invalid");
+				return false;
+			}
+		}
+		return true;
+	}
+
 
 	/**
 	* File Name
