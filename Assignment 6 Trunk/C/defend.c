@@ -106,26 +106,32 @@ char* getFileName()
 */
 int getNum()
 {
-	char buffer[20];
-	long result;
+	char buffer[10];
+	int result;
 	
 	do
 	{
-		printf("Please enter a number: ");
+		printf("Please enter a 32 bit number,\n larger values will be truncated: ");
 		fgets(buffer, sizeof(buffer), stdin);
-		
 		
 		if(!strchr(buffer, '\n'))
 			while(fgetc(stdin)!='\n');
 		
 		if(strspn(buffer, "0123456789") <= strlen(buffer))
 		{		
-			debug_printf("Strspn", 0);	
+			debug_printf("Strspn", 0);
 			result = strtol(buffer, 0, 10);
-			if((result < INT_MAX) || (result > INT_MIN))
+			
+			printf("DEBUG: result is: %d\n", result);
+			
+
+			if((result < INT_MAX) && (result > INT_MIN))
+			{
+				printf("You Entered: %s\n", buffer);
 				return (int) result;
+			}
 			else 				
-				printf("That number is too large for an int.");
+				printf("That number is too large for an int.\n");
 		}
 		else printf("Invalid input\n");
 	} while(1);
@@ -133,7 +139,7 @@ int getNum()
 
 int canUseNums(int num1,int num2)
 {
-	if((long)(num1+num2) <0 && (num1>0 || num2>0))
+	if((long)(num1+num2) < 0 && (num1 > 0 || num2 > 0))
 	{
 		printf("These numbers are too large to be added together.\n");
 		return 0;
