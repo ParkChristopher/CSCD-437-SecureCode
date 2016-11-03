@@ -12,6 +12,7 @@ Defend Your Code
 #include <string.h>
 #include <errno.h>
 #include <limits.h>
+#include <math.h>
 
 #define  MAX_STRING 60
 
@@ -106,40 +107,81 @@ char* getFileName()
 */
 int getNum()
 {
-	char buffer[10];
+	char buffer[11];
+	long input;
 	int result;
 	
 	do
 	{
-		printf("Please enter a 32 bit number,\n larger values will be truncated: ");
+		printf("Please enter a 32 bit number,\n"); 
+		printf("larger values will be truncated if possible: ");
 		fgets(buffer, sizeof(buffer), stdin);
-		
+
+
 		if(!strchr(buffer, '\n'))
 			while(fgetc(stdin)!='\n');
 		
 		if(strspn(buffer, "0123456789") <= strlen(buffer))
 		{		
 			debug_printf("Strspn", 0);
-			result = strtol(buffer, 0, 10);
+			input = strtol(buffer, 0, 10);
 			
-			printf("DEBUG: result is: %d\n", result);
-			
-
-			if((result < INT_MAX) && (result > INT_MIN))
+			if(input < INT_MAX && input > INT_MIN)
 			{
+				result = (int) input;
 				printf("You Entered: %s\n", buffer);
-				return (int) result;
+				return result;
 			}
 			else 				
-				printf("That number is too large for an int.\n");
+				printf("That number is too large. Can't be truncated.\n");
 		}
 		else printf("Invalid input\n");
 	} while(1);
 }
 
+/**
+* Check for arithmetic overflow.
+*/
 int canUseNums(int num1,int num2)
 {
-	if((long)(num1+num2) < 0 && (num1 > 0 || num2 > 0))
+	long val_check;
+
+	/*Negative Overflow*/
+	if(num1 > 0 && num2 > 0)
+	{
+		val_check = num1 + num2;
+
+		if(val_check < 0)
+		{
+			printf("Addition operation not allowed: Causes an overflow.\n");
+			return 0;
+		}
+	}/*Positive Underflow*/
+	else if(num1 < 0 && num2 < 0)
+	{
+		val_check = num1 + num2;
+
+		if(val_check > 0)
+		{
+			printf("Addition operation not allowed: Causes an overflow.\n");
+			return 0;
+		}
+	}
+	else 
+	{
+		val_check = num1 * num2;
+
+		if(val_check > INT_MAX || val_check < INT_MIN)
+		{
+			printf("Multiplication operation not allowed. Causes an overflow");
+			return 0;
+		}
+	}
+
+	return 1;
+
+	/*
+	if((((num1 + num2) < 0) && (num1 > 0 || num2 > 0))
 	{
 		printf("These numbers are too large to be added together.\n");
 		return 0;
@@ -150,6 +192,7 @@ int canUseNums(int num1,int num2)
 		return 0;
 	}
 	else return 1;
+	*/
 }
 
 
