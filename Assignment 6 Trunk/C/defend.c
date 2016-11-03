@@ -27,14 +27,14 @@ void debug_printf(char* str, int result);
 int main()
 {
 	int num1, num2;
-	/*char first_name[50];*/
+	char first_name[50];
 	/*
 	char* last_name;
 	char* in_file_name;
 	char* out_file_name;
 	*/
 	
-	/*get_string("first name", first_name);*/
+	get_string("first name", first_name);
 
 	do
 	{
@@ -53,47 +53,51 @@ void get_string(char* type, char* str)
 {
 	int result;
 	int is_locked = 1;
-	char raw_input[50];
+	char raw_input[51];
 	regex_t pattern;
 	
-	/*compiled_pattern = malloc(sizeof(regex_t));*/
-	
-	result = regcomp(&pattern, "^([a-zA-Z\\-])\\{1,50\\}$", REG_NOSUB);
+	result = regcomp(&pattern, "^([a-zA-Z]){1,50}", REG_EXTENDED);
 	debug_printf("Pattern compile", result);
 	
 	while(is_locked)
 	{
-		
 		printf("Please enter %s: ", type);
 		
-		if(fgets(raw_input, sizeof(raw_input), stdin))
+		if(fgets(raw_input, (sizeof(raw_input) - 1), stdin))
 		{
 
-			/*Need to purge stdin here in case of extra user input*/
+			if(!strchr(raw_input, '\n'))
+			{
+				raw_input[49] = '\0';
+				while(fgetc(stdin)!='\n');
+			}
+			
+			printf("String is: %s\n", raw_input);
 
-			printf("%s", raw_input);
-			/*do checks here*/
+			
 			if(!regexec(&pattern, raw_input, 0, 0 , 0))
 			{
 				
-				printf("Yep!\r\n");
+				debug_printf("Yep!\r\n", 0);
 				is_locked = 0;
 			}
 			else
-			{
+			{	
+
 				printf("Invalid Input\r\n");
-				printf("Expected alphabetic not exceeding 50 characters.\r\n");	
+				printf("Expected alpha characters.\r\n");	
 			}
 		}
 		else
 		{
+			printf("Outer Nope!\r\n");
+
 			printf("Invalid Input\r\n");
-			printf("Expected alphabetic not exceeding 50 characters.\r\n");
+			printf("Expected alpha characters.\r\n");
 		}
 	}
 	
 	strncpy(str, raw_input, sizeof(raw_input));
-	/*free(compiled_pattern);*/
 }
 
 char* getFileName()
@@ -101,39 +105,41 @@ char* getFileName()
 	return NULL;
 }
 
-
 /**
 * Get a 32 Bit Integer
 */
 int getNum()
 {
-	char buffer[11];
+	char raw_input[11];
 	long input;
 	int result;
+	regex_t pattern;
 	
+	regcomp(&pattern, "^([0-9]){1,10}", REG_EXTENDED);
+
 	do
 	{
 		printf("Please enter a 32 bit number,\n"); 
 		printf("larger values will be truncated if possible: ");
-		fgets(buffer, sizeof(buffer), stdin);
+		fgets(raw_input, sizeof(raw_input), stdin);
 
-
-		if(!strchr(buffer, '\n'))
+		if(!strchr(raw_input, '\n'))
+		{
+			raw_input[10] = '\0';
 			while(fgetc(stdin)!='\n');
+		}
 		
-		if(strspn(buffer, "0123456789") <= strlen(buffer))
-		{		
-			debug_printf("Strspn", 0);
-			input = strtol(buffer, 0, 10);
+		if(!regexec(&pattern, raw_input, 0, 0 , 0))
+		{
+			input = strtol(raw_input, 0, 10);
 			
 			if(input < INT_MAX && input > INT_MIN)
 			{
 				result = (int) input;
-				printf("You Entered: %s\n", buffer);
+				printf("You Entered: %s\n", raw_input);
 				return result;
 			}
-			else 				
-				printf("That number is too large. Can't be truncated.\n");
+			else printf("That number is too large. Can't be truncated.\n");
 		}
 		else printf("Invalid input\n");
 	} while(1);
@@ -146,7 +152,6 @@ int canUseNums(int num1,int num2)
 {
 	long val_check;
 
-	/*Negative Overflow*/
 	if(num1 > 0 && num2 > 0)
 	{
 		val_check = num1 + num2;
@@ -156,7 +161,7 @@ int canUseNums(int num1,int num2)
 			printf("Addition operation not allowed: Causes an overflow.\n");
 			return 0;
 		}
-	}/*Positive Underflow*/
+	}
 	else if(num1 < 0 && num2 < 0)
 	{
 		val_check = num1 + num2;
@@ -179,20 +184,6 @@ int canUseNums(int num1,int num2)
 	}
 
 	return 1;
-
-	/*
-	if((((num1 + num2) < 0) && (num1 > 0 || num2 > 0))
-	{
-		printf("These numbers are too large to be added together.\n");
-		return 0;
-	}	
-	else if((long)(num1*num2)<0 && (num1>0 || num2>0))
-	{
-		printf("These numbers are too large to be multiplied,\n");
-		return 0;
-	}
-	else return 1;
-	*/
 }
 
 
