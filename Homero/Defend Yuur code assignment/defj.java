@@ -13,8 +13,9 @@ public class defj{
    public static void main(String[] args){
    	
       Scanner scan;
-      PrintWriter writer;
-      String firstName, lastName, inFileName, outFileName;
+      PrintWriter writer = null;
+      String firstName, lastName, outFileName;
+      String inFileName = "";
       long val1, val2;
    	
       scan = new Scanner(System.in);
@@ -22,12 +23,14 @@ public class defj{
       firstName = getString("first name", scan);
       lastName = getString("last name", scan);
       int[]numbers = readNum(scan);
-      inFileName = getFileName("input", scan);
-      outFileName = getFileName("output", scan);
+      inFileName = getFileName("input",inFileName,scan);
+      outFileName = getFileName("output",inFileName, scan);
       getPassword(scan);
    	verifyPassword(scan);
-   	//Write to ouput
-      scan.close();
+      scan =  inputFileHookUp(scan,inFileName);
+      writer = outputFileHookUp(writer,outFileName);
+   	writeToOutput(scan, writer,numbers,firstName,lastName);
+      
    }
 	
 	/**
@@ -139,7 +142,7 @@ public class defj{
 	/**
 	* File Name
 	*/
-   public static String getFileName(String type, Scanner scan){
+   public static String getFileName(String type,String inputFileName, Scanner scan){
    	
       String input = "";
       boolean done = false; 
@@ -150,7 +153,27 @@ public class defj{
          System.out.print("Please enter  an " + type + " file name: ");
          input = scan.next();
       	
-         if(isMatched(input, pattern)) done = true;
+         if(isMatched(input, pattern))
+         {
+            if( input.compareTo("test.txt") == 0)
+            {
+               System.out.print("Invalid input:");
+               System.out.println("File Name selected is not allowed");
+            }
+            else if(type.compareTo("output")==0)
+            {
+               if(inputFileName.compareTo(input)==0)
+               {
+                System.out.print("Invalid input:");
+                System.out.println("File Name was selected as input file name");
+               }
+               else
+                  done = true;
+            }
+            else 
+               done = true;
+         }
+          
          else {
          	
             System.out.print("Invalid input:");
@@ -279,9 +302,55 @@ public class defj{
 //result of addition and multiplying the integer values
 //contents of input file
 
+   
 	
-   public static void writeToOutput(Scanner scan, FileWriter outFile){
-   	
+   public static void writeToOutput(Scanner scan, PrintWriter outFile,int []numbers, String firstName,String lastName)
+   {
+      String transfer = "";
+      outFile.println(firstName + " " + lastName);
+   	outFile.println("Sum = " + (numbers[0] + numbers[1]));
+      outFile.println("Product = " +numbers[0] * numbers[1]);
+      
+      if(scan != null)
+      {
+         while(scan.hasNextLine())
+         {
+            transfer = scan.nextLine();
+            outFile.println(transfer);
+            
+         }
+         scan.close();
+         
+      }
+   outFile.close();
+   }
+   
+   
+//Hook Up scanner to read file
+   public static Scanner inputFileHookUp(Scanner scan,  String input){
+   
+      try{
+      
+       scan = new Scanner(new File(input));
+       
+      
+      }catch(IOException e)
+      {
+         return null;
+      }
+      return scan;
+   }
+   
+//Hook up PrintWriter to write to file   
+    public static PrintWriter outputFileHookUp(PrintWriter writer,  String output){
+   
+      try{
+      
+       writer = new PrintWriter(new File(output));
+
+      }catch(IOException e){}
+      
+      return writer;
    }
 
    public static boolean isMatched(String str, Pattern pattern){
