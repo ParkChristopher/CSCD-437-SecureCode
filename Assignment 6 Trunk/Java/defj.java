@@ -151,7 +151,7 @@ public class defj{
    	
       String input = "";
       boolean done = false; 
-      Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+.{1}txt$");
+      Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+\\.{1}txt$");
    	
       while(!done){
       	
@@ -208,7 +208,14 @@ public class defj{
       byte [] salt = new byte[input.length()];
       SecureRandom ran = new SecureRandom();
       ran.nextBytes(salt);
-      input = salt + input;     
+      String getSaltString = "";
+      
+      for(int x = 0; x< salt.length; x++)
+      {
+         getSaltString = getSaltString + salt[x];
+      }
+      
+      input =getSaltString + input;     
            
       byte [] hashedInput = new byte[input.length()+224];
      
@@ -220,7 +227,7 @@ public class defj{
       String hash = w.display(hashedInput);
       try{
          PrintWriter writer = new PrintWriter(new File("test.txt"));
-         writer.println(salt);
+         writer.println(getSaltString);
          writer.println(hash);
          writer.close();
          
@@ -257,7 +264,7 @@ public class defj{
          else {
          	
             System.out.println("Invalid input:");
-            System.out.println("Your password need to contain a upper case, lower case, punctuation,and numeric value");
+           
          	
          }
       }
