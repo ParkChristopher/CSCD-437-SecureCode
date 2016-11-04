@@ -22,7 +22,7 @@ int getNum();
 int canUseNums(int num1,int num2);
 void get_string(char* type, char* str);
 void debug_printf(char* str, int result);
-
+void truncate_input(char* str, char target);
 
 int main()
 {
@@ -51,39 +51,37 @@ int main()
 */
 void get_string(char* type, char* str)
 {
-	int result;
+	int result, length; 
 	int is_locked = 1;
-	char raw_input[51];
+	char input[51];
+	char* token;
 	regex_t pattern;
 	
-	result = regcomp(&pattern, "^([a-zA-Z]){1,50}", REG_EXTENDED);
+	result = regcomp(&pattern, "^[a-zA-Z]{1,50}$", REG_EXTENDED);
 	debug_printf("Pattern compile", result);
+
 	
 	while(is_locked)
 	{
-		printf("Please enter %s: ", type);
+		printf("Please enter a %s. \r\n", type);
+		printf("Names greater than 50 characters will be truncated: ");
 		
-		if(fgets(raw_input, (sizeof(raw_input) - 1), stdin))
+		if(fgets(input, (sizeof(input) - 1), stdin))
 		{
-
-			if(!strchr(raw_input, '\n'))
-			{
-				raw_input[49] = '\0';
+			if(!strchr(input, '\n'))		
 				while(fgetc(stdin)!='\n');
-			}
-			
-			printf("String is: %s\n", raw_input);
 
+			token = strtok(input, "\n");
+
+			printf("String is: %s\r\n", token);
 			
-			if(!regexec(&pattern, raw_input, 0, 0 , 0))
+			if(!regexec(&pattern, token, 0, 0 , 0))
 			{
-				
 				debug_printf("Yep!\r\n", 0);
 				is_locked = 0;
 			}
 			else
 			{	
-
 				printf("Invalid Input\r\n");
 				printf("Expected alpha characters.\r\n");	
 			}
@@ -96,12 +94,18 @@ void get_string(char* type, char* str)
 			printf("Expected alpha characters.\r\n");
 		}
 	}
-	
-	strncpy(str, raw_input, sizeof(raw_input));
+
+	length = strlen(token);
+	strncpy(str, token, length);
 }
 
 char* getFileName()
 {
+	/*^[a-zA-Z0-9-_]+.{1}txt$*/
+
+
+
+	
 	return NULL;
 }
 
@@ -185,7 +189,6 @@ int canUseNums(int num1,int num2)
 
 	return 1;
 }
-
 
 void debug_printf(char* str, int result)
 {
