@@ -31,14 +31,11 @@ int main()
 	char first_name[50];
 	char last_name[50];
 	char infile_name[50];
-
-	/*
-	char* out_file_name;
-	*/
+	char outfile_name[50];
 	
 	get_string("first name", first_name);
 	get_string("last name", last_name);
-	get_filename("input", infile_name);
+	
 
 
 	do
@@ -47,6 +44,11 @@ int main()
 		num2 = getNum();
 	} while(!canUseNums(num1, num2));
 	debug_printf("Exit while loop in main, ", 0);
+	
+	get_filename("input", infile_name);
+	get_filename("output", outfile_name);
+
+
 	return 0;
 }
 
@@ -75,9 +77,14 @@ void get_string(char* type, char* str)
 				while(fgetc(stdin)!='\n');
 
 			token = strtok(input, "\n");
-			printf("String is: %s\r\n", token);
+
+			if(token != NULL)
+			{
+				printf("String is: %s\r\n", token);
 			
-			if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+				if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+				else printf("Invalid Input\r\n");
+			}
 			else printf("Invalid Input\r\n");
 		}
 		else printf("Invalid Input\r\n");
@@ -111,9 +118,14 @@ void get_filename(char* type, char* str)
 				while(fgetc(stdin)!='\n');
 
 			token = strtok(input, "\n");
-			printf("Filename is: %s\r\n", token);
 
-			if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+			if(token != NULL)
+			{
+				printf("Filename is: %s\r\n", token);
+
+				if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+				else printf("Invalid Input\r\n");
+			}
 			else printf("Invalid Input\r\n");
 		}
 		else printf("Invalid Input\r\n");
@@ -129,39 +141,46 @@ void get_filename(char* type, char* str)
 */
 int getNum()
 {
-	char raw_input[11];
-	long input;
+	char input[11];
+	char* token;
+	long num;
 	int result;
 	regex_t pattern;
 	
-	regcomp(&pattern, "^([0-9]){1,10}", REG_EXTENDED);
+	regcomp(&pattern, "^([0-9]){1,10}$", REG_EXTENDED);
 
 	do
 	{
-		printf("Please enter a 32 bit number,\n"); 
+		printf("Please enter a 32 bit number,\r\n"); 
 		printf("larger values will be truncated if possible: ");
-		fgets(raw_input, sizeof(raw_input), stdin);
+		fgets(input, sizeof(input), stdin);
 
-		if(!strchr(raw_input, '\n'))
-		{
-			raw_input[10] = '\0';
+		if(!strchr(input, '\n'))
 			while(fgetc(stdin)!='\n');
-		}
 		
-		if(!regexec(&pattern, raw_input, 0, 0 , 0))
+		token = strtok(input, "\n");
+
+		if(token != NULL)
 		{
-			input = strtol(raw_input, 0, 10);
+			printf("Number is: %s\r\n", token);
 			
-			if(input < INT_MAX && input > INT_MIN)
+			if(!regexec(&pattern, token, 0, 0 , 0))
 			{
-				result = (int) input;
-				printf("You Entered: %s\n", raw_input);
-				return result;
+				num = strtol(input, 0, 10);
+				
+				if(num < INT_MAX && num > INT_MIN)
+				{
+					result = (int) num;
+					return result;
+				}
+				else printf("That number is too large. Can't be truncated.\r\n");
 			}
-			else printf("That number is too large. Can't be truncated.\n");
+			else printf("Invalid input\r\n");
 		}
-		else printf("Invalid input\n");
+		else printf("Invalid input\r\n");
+		
 	} while(1);
+	regfree(&pattern);
 }
 
 /**
