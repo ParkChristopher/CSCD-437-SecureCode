@@ -24,6 +24,8 @@ void get_string(char* type, char* str);
 void debug_printf(char* str, int result);
 void truncate_input(char* str, char target);
 void get_filename(char* type, char* str);
+void write_to_ouput(char* filename, char* first_name,
+				    char* last_name, int num_1, int num_2);
 
 int main()
 {
@@ -35,8 +37,6 @@ int main()
 	
 	get_string("first name", first_name);
 	get_string("last name", last_name);
-	
-
 
 	do
 	{
@@ -48,7 +48,12 @@ int main()
 	get_filename("input", infile_name);
 	get_filename("output", outfile_name);
 
-
+	/*
+	* Get Password
+	* Verify Password
+	* Get Input file
+	* Write to Ouput
+	*/
 	return 0;
 }
 
@@ -224,6 +229,51 @@ int can_use_nums(int num1,int num2)
 	return 1;
 }
 
+
+/*
+* Read Input File
+
+open input file
+read characters into buffer, set a maximum buffer full check
+
+*/
+
+/*
+* Write To Output
+*/
+void write_to_ouput(char* filename, char* first_name,
+ 					char* last_name, int num_1, int num_2)
+{
+	FILE* out_file = fopen(filename, "a");
+
+	if(out_file == NULL) printf("File not opened.\r\n");
+	
+	/*Null terminate all strings*/
+
+	/*Ouput name*/
+	fputs(first_name, out_file);
+	fputc('\n', out_file);
+	fputs(last_name, out_file);
+	fputc('\n', out_file);
+
+	/*Ouput integer addition*/
+	fprintf(out_file, "%d", (num_1 + num_2));
+	fputc('\n', out_file);
+	/*Output multiplication*/
+	fprintf(out_file, "%d", (num_1 * num_2));
+	fputc('\n', out_file);
+	/*Output input file*/
+	
+
+	fclose(out_file);
+}
+
+
+	
+
+/*
+* For Debugging Return Values.
+*/
 void debug_printf(char* str, int result)
 {
 	if(!result) printf("%s [%d] success.\r\n", str, result);
