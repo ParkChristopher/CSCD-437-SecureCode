@@ -23,18 +23,23 @@ int canUseNums(int num1,int num2);
 void get_string(char* type, char* str);
 void debug_printf(char* str, int result);
 void truncate_input(char* str, char target);
+void get_filename(char* type, char* str);
 
 int main()
 {
 	int num1, num2;
 	char first_name[50];
+	char last_name[50];
+	char infile_name[50];
+
 	/*
-	char* last_name;
-	char* in_file_name;
 	char* out_file_name;
 	*/
 	
 	get_string("first name", first_name);
+	get_string("last name", last_name);
+	get_filename("input", infile_name);
+
 
 	do
 	{
@@ -51,16 +56,14 @@ int main()
 */
 void get_string(char* type, char* str)
 {
-	int result, length; 
+	int length; 
 	int is_locked = 1;
 	char input[51];
 	char* token;
 	regex_t pattern;
 	
-	result = regcomp(&pattern, "^[a-zA-Z]{1,50}$", REG_EXTENDED);
-	debug_printf("Pattern compile", result);
+	regcomp(&pattern, "^[a-zA-Z]{1,50}$", REG_EXTENDED);
 
-	
 	while(is_locked)
 	{
 		printf("Please enter a %s. \r\n", type);
@@ -68,45 +71,57 @@ void get_string(char* type, char* str)
 		
 		if(fgets(input, (sizeof(input) - 1), stdin))
 		{
-			if(!strchr(input, '\n'))		
+			if(!strchr(input, '\n'))
 				while(fgetc(stdin)!='\n');
 
 			token = strtok(input, "\n");
-
 			printf("String is: %s\r\n", token);
 			
-			if(!regexec(&pattern, token, 0, 0 , 0))
-			{
-				debug_printf("Yep!\r\n", 0);
-				is_locked = 0;
-			}
-			else
-			{	
-				printf("Invalid Input\r\n");
-				printf("Expected alpha characters.\r\n");	
-			}
+			if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+			else printf("Invalid Input\r\n");
 		}
-		else
-		{
-			printf("Outer Nope!\r\n");
-
-			printf("Invalid Input\r\n");
-			printf("Expected alpha characters.\r\n");
-		}
+		else printf("Invalid Input\r\n");
 	}
 
 	length = strlen(token);
 	strncpy(str, token, length);
+	regfree(&pattern);
 }
 
-char* getFileName()
+/**
+* Gets a file name from the user. Must be .txt format
+*/
+void get_filename(char* type, char* str)
 {
-	/*^[a-zA-Z0-9-_]+.{1}txt$*/
-
-
-
+	int length;
+	int is_locked = 1;
+	char input[51];
+	char* token;
+	regex_t pattern;
 	
-	return NULL;
+	regcomp(&pattern, "^[a-zA-Z0-9]+.{1}txt$", REG_EXTENDED);
+	
+	while(is_locked)
+	{
+		printf("Please enter an %s .txt file: ", type);
+		
+		if(fgets(input, (sizeof(input) - 1), stdin))
+		{
+			if(!strchr(input, '\n'))
+				while(fgetc(stdin)!='\n');
+
+			token = strtok(input, "\n");
+			printf("Filename is: %s\r\n", token);
+
+			if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+			else printf("Invalid Input\r\n");
+		}
+		else printf("Invalid Input\r\n");
+	}
+
+	length = strlen(token);
+	strncpy(str, token, length);
+	regfree(&pattern);
 }
 
 /**

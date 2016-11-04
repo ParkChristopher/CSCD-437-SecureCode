@@ -1,5 +1,7 @@
 //Secure Code Assignment 6
 //Chris Park
+//Homero Gonzalez
+//Travis Landers
 
 import java.io.*;
 import java.util.Scanner;
@@ -37,7 +39,7 @@ public class defj{
 		
 		String input = "";
 		boolean done = false; 
-		Pattern pattern = Pattern.compile("^([a-zA-Z\\-]){1,50}$");
+		Pattern pattern = Pattern.compile("^([a-zA-Z]){1,50}$");
 		
 		while(!done){
 			
@@ -139,7 +141,7 @@ public class defj{
 		
 		String input = "";
 		boolean done = false; 
-		Pattern pattern = Pattern.compile("^[a-zA-Z0-9\\-_]+.{1}txt$");
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+.{1}txt$");
 		
 		while(!done){
 			
@@ -151,7 +153,7 @@ public class defj{
 				
 				System.out.print("Invalid input:");
 				System.out.print("Expected valid .txt file name made up of characters,");
-				System.out.println("numbers, and (-_). Example: <my-file_name9.txt>");
+				System.out.println("numbers. Example: <my-file_name9.txt>");
 			}
 		}
 		
