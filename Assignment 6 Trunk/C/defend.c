@@ -18,8 +18,8 @@ Defend Your Code
 
 /*gcc -pedantic -Wall -Wextra -Werror yourFile.c*/
 
-int getNum();
-int canUseNums(int num1,int num2);
+int get_num();
+int can_use_nums(int num1,int num2);
 void get_string(char* type, char* str);
 void debug_printf(char* str, int result);
 void truncate_input(char* str, char target);
@@ -40,9 +40,9 @@ int main()
 
 	do
 	{
-		num1 = getNum();
-		num2 = getNum();
-	} while(!canUseNums(num1, num2));
+		num1 = get_num();
+		num2 = get_num();
+	} while(!can_use_nums(num1, num2));
 	debug_printf("Exit while loop in main, ", 0);
 	
 	get_filename("input", infile_name);
@@ -139,7 +139,7 @@ void get_filename(char* type, char* str)
 /**
 * Get a 32 Bit Integer
 */
-int getNum()
+int get_num()
 {
 	char input[11];
 	char* token;
@@ -171,6 +171,7 @@ int getNum()
 				if(num < INT_MAX && num > INT_MIN)
 				{
 					result = (int) num;
+					regfree(&pattern);
 					return result;
 				}
 				else printf("That number is too large. Can't be truncated.\r\n");
@@ -180,13 +181,12 @@ int getNum()
 		else printf("Invalid input\r\n");
 		
 	} while(1);
-	regfree(&pattern);
 }
 
 /**
 * Check for arithmetic overflow.
 */
-int canUseNums(int num1,int num2)
+int can_use_nums(int num1,int num2)
 {
 	long val_check;
 
