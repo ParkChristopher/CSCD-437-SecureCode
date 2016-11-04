@@ -201,7 +201,7 @@ public class defj{
          else {
          	
             System.out.println("Invalid input:");
-            System.out.println("Your password need to contain a upper case, lower case, punctuation,and numeric value");
+           
          }
       }
 
