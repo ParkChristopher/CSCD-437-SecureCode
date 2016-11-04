@@ -26,6 +26,7 @@ void truncate_input(char* str, char target);
 void get_filename(char* type, char* str);
 void write_to_ouput(char* filename, char* first_name,
 				    char* last_name, int num_1, int num_2);
+void get_password(char* type, char* str);
 
 int main()
 {
@@ -34,6 +35,8 @@ int main()
 	char last_name[50];
 	char infile_name[50];
 	char outfile_name[50];
+	char password_one[50];
+	char password_two[50];
 	
 	get_string("first name", first_name);
 	get_string("last name", last_name);
@@ -43,11 +46,19 @@ int main()
 		num1 = get_num();
 		num2 = get_num();
 	} while(!can_use_nums(num1, num2));
-	debug_printf("Exit while loop in main, ", 0);
 	
-	get_filename("input", infile_name);
-	get_filename("output", outfile_name);
+	do
+	{
+		get_filename("input", infile_name);
+		get_filename("output", outfile_name);
+		if(strcmp(infile_name, outfile_name)==0)
+			printf("The file names cannot be the same, please try again\n");
+	}while(strcmp(infile_name, outfile_name)==0);
 
+
+	get_password("",password_one);
+	get_password("re",password_two);
+	
 	/*
 	* Get Password
 	* Verify Password
@@ -57,10 +68,52 @@ int main()
 	return 0;
 }
 
+
+
 /**
 * Get a string from the user, String should be
 * between 1 and 50 alpha characters.
 */
+void get_password(char* type, char* str)
+{
+	int length; 
+	int is_locked = 1;
+	char input[51];
+	char* token;
+	regex_t pattern;
+	
+	regcomp(&pattern, "^[a-zA-Z0-9!?]{1,50}$", REG_EXTENDED);
+
+	while(is_locked)
+	{
+		printf("Please %senter a password:\r\n", type);
+		printf("(Allowed: ?!, A-Z, a-z, 0-9): ");
+		
+		
+		if(fgets(input, (sizeof(input) - 1), stdin))
+		{
+			if(!strchr(input, '\n'))
+				while(fgetc(stdin)!='\n');
+
+			token = strtok(input, "\n");
+
+			if(token != NULL)
+			{
+				printf("String is: %s\r\n", token);
+			
+				if(!regexec(&pattern, token, 0, 0 , 0)) is_locked = 0;
+				else printf("Invalid Input\r\n");
+			}
+			else printf("Invalid Input\r\n");
+		}
+		else printf("Invalid Input\r\n");
+	}
+
+	length = strlen(token);
+	strncpy(str, token, length);
+	regfree(&pattern);
+}
+
 void get_string(char* type, char* str)
 {
 	int length; 
@@ -111,7 +164,7 @@ void get_filename(char* type, char* str)
 	char* token;
 	regex_t pattern;
 	
-	regcomp(&pattern, "^[a-zA-Z0-9]+.{1}txt$", REG_EXTENDED);
+	regcomp(&pattern, "^([a-zA-Z0-9])+\\.txt$", REG_EXTENDED);
 	
 	while(is_locked)
 	{
@@ -232,10 +285,8 @@ int can_use_nums(int num1,int num2)
 
 /*
 * Read Input File
-
 open input file
 read characters into buffer, set a maximum buffer full check
-
 */
 
 /*
@@ -279,6 +330,3 @@ void debug_printf(char* str, int result)
 	if(!result) printf("%s [%d] success.\r\n", str, result);
 	else 	  	printf("%s [%d] failure.\r\n", str, result);
 }
-
-
-
