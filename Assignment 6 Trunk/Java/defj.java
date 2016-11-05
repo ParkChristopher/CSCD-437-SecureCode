@@ -1,12 +1,17 @@
-//Secure Code Assignment 6
-//Chris Park
-
+/**
+* Chris Park
+* Travis Landers
+* Homero Gonzalez
+* Secure Code Assn. 6
+* Defend Your Code
+*/
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.*;
 import java.math.BigInteger;
 import java.lang.Exception;
 import java.security.SecureRandom;
+
 
 public class defj{
 

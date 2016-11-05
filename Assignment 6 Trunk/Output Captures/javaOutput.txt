@@ -1,0 +1,47 @@
+desolis@blues:~/Dropbox/Chris/Code/SecureCode/CSCD-437-SecureCode/Assignment 6 Trunk/Java$ javac *java
+desolis@blues:~/Dropbox/Chris/Code/SecureCode/CSCD-437-SecureCode/Assignment 6 Trunk/Java$ java defj 
+Please enter first name:987
+987
+Invalid input, Expected alphabetic not exceeding 50 characters. 
+Please enter first name:C9sdfse9!  
+C9sdfse9!
+Invalid input, Expected alphabetic not exceeding 50 characters. 
+Please enter first name:Chris     
+Chris
+Please enter last name:90234
+90234
+Invalid input, Expected alphabetic not exceeding 50 characters. 
+Please enter last name:Park
+Park
+Enter Your first 32bit Number
+asdfasdf234
+Enter Your first 32bit Number
+098sdf
+Enter Your first 32bit Number
+23445
+Enter Your second 32bit Number
+98786
+Number combinations are invalid
+Enter Your first 32bit Number
+234
+Enter Your second 32bit Number
+98798
+Please enter  an input file name: in.txt
+Please enter  an output file name: in.txt
+Invalid input. File Name was selected as input file name.
+Please enter  an output file name: out.txt
+Please enter your password: Al0?
+Please re-enter your password for confirmation: durp
+Passwords did not match
+Please re-enter your password for confirmation: aL0? 
+Passwords did not match
+Please re-enter your password for confirmation: Al0?
+Password confirmed.
+File Output completed.
+desolis@blues:~/Dropbox/Chris/Code/SecureCode/CSCD-437-SecureCode/Assignment 6 Trunk/Java$ 
+
+Contents of out.txt:
+
+Chris Park
+Sum = 99032
+Product = 23118732

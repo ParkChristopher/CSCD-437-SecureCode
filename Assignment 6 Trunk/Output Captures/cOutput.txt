@@ -1,0 +1,76 @@
+desolis@blues:~/Dropbox/Chris/Code/SecureCode/CSCD-437-SecureCode/Assignment 6 Trunk/C$ ./defend 
+Please enter a first name. 
+Names greater than 50 characters will be truncated: 9sdf
+String is: 9sdf
+Invalid Input
+Please enter a first name. 
+Names greater than 50 characters will be truncated: asdf234
+String is: asdf234
+Invalid Input
+Please enter a first name. 
+Names greater than 50 characters will be truncated: Chris
+String is: Chris
+Please enter a last name. 
+Names greater than 50 characters will be truncated: !!!!!! 
+String is: !!!!!!
+Invalid Input
+Please enter a last name. 
+Names greater than 50 characters will be truncated: ????
+String is: ????
+Invalid Input
+Please enter a last name. 
+Names greater than 50 characters will be truncated: as_234
+String is: as_234
+Invalid Input
+Please enter a last name. 
+Names greater than 50 characters will be truncated: Park
+String is: Park
+Please enter a 32 bit number,
+larger values will be truncated if possible: 234-09-09
+Number is: 234-09-09
+Invalid input
+Please enter a 32 bit number,
+larger values will be truncated if possible: asdf
+Number is: asdf
+Invalid input
+Please enter a 32 bit number,
+larger values will be truncated if possible: 879sadf
+Number is: 879sadf
+Invalid input
+Please enter a 32 bit number,
+larger values will be truncated if possible: 234324234234252354325
+Number is: 2343242342
+That number is too large. Can't be truncated.
+Please enter a 32 bit number,
+larger values will be truncated if possible: 123123
+Number is: 123123
+Please enter a 32 bit number,
+larger values will be truncated if possible: 12312313423          
+Number is: 1231231342
+Please enter an input .txt file: durptxt
+Filename is: durptxt
+Invalid Input
+Please enter an input .txt file: test.arg        
+Filename is: test.arg
+Invalid Input
+Please enter an input .txt file: in.txt
+Filename is: in.txt
+Please enter an output .txt file: in.txt
+Filename is: in.txt
+The file names cannot be the same, please try again
+Please enter an input .txt file: out.txt
+Filename is: out.txt
+Please enter an output .txt file: out.txt
+Filename is: out.txt
+The file names cannot be the same, please try again
+Please enter an input .txt file: in.txt
+Filename is: in.txt
+Please enter an output .txt file: out.txt
+Filename is: out.txt
+Please enter a password:
+(Allowed: ?!, A-Z, a-z, 0-9): ./herpderp!988           
+String is: ./herpderp!988
+Invalid Input
+Please enter a password:
+(Allowed: ?!, A-Z, a-z, 0-9): !AWinnerIsYou923
+String is: !AWinnerIsYou923

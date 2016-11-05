@@ -1,0 +1,23 @@
+/***README***/
+
+Need to know:
+	-The C version of the project is compiled under linux and uses libraries specific to it.
+
+
+
+What did we defend:
+
+Java & C
+-Integer Overflow
+-Buffer Overflow
+
+-Improper or potentially hazardous user input.
+	-Crashing
+	-Scrubbing Strings
+	-Scrubbing Filenames
+	-Verifying and Encrypting Passwords
+
+Shortcomings:
+
+The C version is incomplete, it protects against overflow and inproper user input, but is missing password encryption/verification, and file output.
+
