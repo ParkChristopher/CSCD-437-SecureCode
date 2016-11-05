@@ -10,7 +10,9 @@ import java.security.SecureRandom;
 
 public class defj{
 
-   public static void main(String[] args){
+   public static PrintWriter mLogWriter;
+
+   public static void main(String[] args) throws IOException { 
    	
       Scanner scan;
       PrintWriter writer = null;
@@ -20,7 +22,9 @@ public class defj{
    	int[] numbers;
 
       scan = new Scanner(System.in);
-   	
+   	mLogWriter = new PrintWriter(new FileWriter("log.txt"));
+
+
       firstName = getString("first name", scan);
       lastName = getString("last name", scan);
       numbers = readNum(scan);
@@ -31,11 +35,13 @@ public class defj{
       while(!isVerified){
          isVerified = verifyPassword(scan);
       }
-   	
 
       scan =  inputFileHookUp(scan,inFileName);
       writer = outputFileHookUp(writer,outFileName);
    	writeToOutput(scan, writer,numbers,firstName,lastName);
+      mLogWriter.close();
+
+      System.out.println("File Output completed.");
    }
 	
 	/**
@@ -55,9 +61,9 @@ public class defj{
       	
          if(isMatched(input, pattern)) done = true;
          else {
-         	
             System.out.print("Invalid input, ");
             System.out.println("Expected alphabetic not exceeding 50 characters. ");
+            mLogWriter.println("Invalid string entered.");
          }
       }
    	
@@ -67,7 +73,6 @@ public class defj{
 	/**
 	* Integers
 	*/
-  
 	private static int[] readNum(Scanner kb)
 	{
 		int [] numbers = new int[2];
@@ -79,6 +84,7 @@ public class defj{
 			while(!kb.hasNextInt()){
 
 				System.out.println("Enter Your first 32bit Number");
+            mLogWriter.println("Int 1 attempt failed.");
 				kb.next();
 			}
 			
@@ -89,6 +95,7 @@ public class defj{
 			while(!kb.hasNextInt()){
 
 				System.out.println("Enter Your second 32bit Number");
+            mLogWriter.println("Int 2 attempt failed.");
 				kb.next();
 			}
 			
@@ -109,11 +116,13 @@ public class defj{
 			if(numbers[0] + numbers[1] < 0)
 			{
 				System.out.println("Number combinations are invalid");
+            mLogWriter.println("Invalid number combination.");
 				return false;
 			}
 			else if(numbers[0] * numbers[1] < 0)
 			{
 				System.out.println("Number combinations are invalid");
+            mLogWriter.println("Invalid number combination.");
 				return false;
 			}
 		}
@@ -123,11 +132,13 @@ public class defj{
 			if(numbers[0] + numbers[1] > 0)
 			{
 				System.out.println("Number combinations are invalid");
+            mLogWriter.println("Invalid number combination.");
 				return false;
 			}
 			else if(numbers[0] * numbers[1] < 0)
 			{
 				System.out.println("Number combinations are invalid");
+            mLogWriter.println("Invalid number combination.");
 				return false;
 			}
 		}
@@ -137,6 +148,7 @@ public class defj{
 			 if(numbers[0] * numbers[1] >= 0)
 			{
 				System.out.println("Number combinations are invalid");
+            mLogWriter.println("Invalid number combination.");
 				return false;
 			}
 		}
@@ -163,6 +175,7 @@ public class defj{
             if( input.compareTo("test.txt") == 0){
                System.out.print("Invalid input. ");
                System.out.println("File name selected is not allowed.");
+               mLogWriter.println("Invalid file name attempt.");
             }
             else if(type.compareTo("output")==0){
 
@@ -170,6 +183,7 @@ public class defj{
 
                 System.out.print("Invalid input. ");
                 System.out.println("File Name was selected as input file name.");
+                mLogWriter.println("Invalid file name attempt.");
                } else done = true;
             } else done = true;
          } else {
@@ -177,6 +191,7 @@ public class defj{
             System.out.print("Invalid input:");
             System.out.print("Expected valid .txt file name made up of characters,");
             System.out.println("and numbers. Example: <myfilename9.txt>");
+            mLogWriter.println("Invalid file name attempt.");
          }
       }
 
@@ -200,7 +215,8 @@ public class defj{
          if(isMatched(input, pattern)) done = true;
          else {
          	
-            System.out.println("Invalid input:");
+            System.out.println("Invalid input: (A-Z, a-z, 0-9, !?)");
+            mLogWriter.println("Invalid password attempt.");
            
          }
       }
@@ -263,9 +279,8 @@ public class defj{
          if(isMatched(input, pattern)) done = true;
          else {
          	
-            System.out.println("Invalid input:");
-           
-         	
+            System.out.println("Invalid input: password does not match.");
+            mLogWriter.println("Password verification failed.");        
          }
       }
       
@@ -284,6 +299,7 @@ public class defj{
       } else {
          
          System.out.println("Passwords did not match");
+         mLogWriter.println("Password verification failed.");
          return false;
       }
    }
