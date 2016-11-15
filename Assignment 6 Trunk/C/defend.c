@@ -1,9 +1,9 @@
 /**
-Chris Park
-Travis Landers
-Homero Gonzalez
-Secure Code Assn. 6
-Defend Your Code
+* Chris Park
+* Travis Landers
+* Homero Gonzalez
+* Secure Code Assn. 6
+* Defend Your Code
 */
 
 #include <stdlib.h>
@@ -31,12 +31,12 @@ void get_password(char* type, char* str);
 int main()
 {
 	int num1, num2;
-	char first_name[50];
-	char last_name[50];
-	char infile_name[50];
-	char outfile_name[50];
-	char password_one[50];
-	char password_two[50];
+	char first_name[51];
+	char last_name[51];
+	char infile_name[51];
+	char outfile_name[51];
+	char password_one[51];
+	/*char password_two[51];*/
 	
 	get_string("first name", first_name);
 	get_string("last name", last_name);
@@ -57,14 +57,19 @@ int main()
 
 
 	get_password("",password_one);
-	get_password("re",password_two);
+	/*get_password("re",password_two);*/
 	
-	/*
+	/* Coming Soon!
 	* Get Password
 	* Verify Password
 	* Get Input file
 	* Write to Ouput
 	*/
+
+
+	write_to_ouput(outfile_name, first_name, last_name, num1, num2);
+
+
 	return 0;
 }
 
@@ -109,7 +114,7 @@ void get_password(char* type, char* str)
 		else printf("Invalid Input\r\n");
 	}
 
-	length = strlen(token);
+	length = strlen(token) + 1;
 	strncpy(str, token, length);
 	regfree(&pattern);
 }
@@ -127,7 +132,7 @@ void get_string(char* type, char* str)
 	while(is_locked)
 	{
 		printf("Please enter a %s. \r\n", type);
-		printf("Names greater than 50 characters will be truncated: ");
+		printf("Strings greater than 50 characters will be truncated: ");
 		
 		if(fgets(input, (sizeof(input) - 1), stdin))
 		{
@@ -148,7 +153,7 @@ void get_string(char* type, char* str)
 		else printf("Invalid Input\r\n");
 	}
 
-	length = strlen(token);
+	length = strlen(token) + 1;
 	strncpy(str, token, length);
 	regfree(&pattern);
 }
@@ -189,7 +194,7 @@ void get_filename(char* type, char* str)
 		else printf("Invalid Input\r\n");
 	}
 
-	length = strlen(token);
+	length = strlen(token) + 1;
 	strncpy(str, token, length);
 	regfree(&pattern);
 }
@@ -298,9 +303,8 @@ void write_to_ouput(char* filename, char* first_name,
 	FILE* out_file = fopen(filename, "a");
 
 	if(out_file == NULL) printf("File not opened.\r\n");
-	
-	/*Null terminate all strings*/
 
+	printf("%s", filename);
 	/*Ouput name*/
 	fputs(first_name, out_file);
 	fputc('\n', out_file);
@@ -310,17 +314,16 @@ void write_to_ouput(char* filename, char* first_name,
 	/*Ouput integer addition*/
 	fprintf(out_file, "%d", (num_1 + num_2));
 	fputc('\n', out_file);
+	
 	/*Output multiplication*/
 	fprintf(out_file, "%d", (num_1 * num_2));
 	fputc('\n', out_file);
+
 	/*Output input file*/
 	
 
 	fclose(out_file);
-}
-
-
-	
+}	
 
 /*
 * For Debugging Return Values.
