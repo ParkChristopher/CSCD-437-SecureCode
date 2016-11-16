@@ -1694,12 +1694,12 @@ void NESSIEfinalize(struct NESSIEstruct * const structpointer,
 static void display(const u8 array[], int length) {
     int i;
     for (i = 0; i < length; i++) {
-        if (i%32 == 0) {
+    /*    if (i%32 == 0) {
             printf("\n");
         }
         if (i%8 == 0) {
             printf(" ");
-        }
+        }*/
         printf("%02X", array[i]);
     }
 }
@@ -1714,7 +1714,7 @@ static void display(const u8 array[], int length) {
  *    for all lengths from 0 to 1023;
  * 2. hashing all 512-bit strings containing a single set bit;
  * 3. the iterated hashing of the 512-bit string of zero bits a large number of times.
- */
+ 
 void makeNESSIETestVectors() {
     int i;
     struct NESSIEstruct w;
@@ -1732,14 +1732,14 @@ void makeNESSIETestVectors() {
     printf("Message digests of all 512-bit strings S containing a single 1-bit:\n");
     memset(data, 0, sizeof(data));
     for (i = 0; i < 512; i++) {
-        /* set bit i: */
+        /* set bit i: 
         data[i/8] |= 0x80U >> (i % 8);
         NESSIEinit(&w);
         NESSIEadd(data, 512, &w);
         NESSIEfinalize(&w, digest);
         printf("    S = "); display(data, 512/8); printf(": ");
         display(digest, DIGESTBYTES); printf("\n");
-        /* reset bit i: */
+        /* reset bit i: 
         data[i/8] = 0;
     }
     memset(digest, 0, sizeof(digest));
@@ -1796,7 +1796,7 @@ static void timing() {
         (float)512*TIMING_ITERATIONS/sec/1000000,
         (float)550e6*sec/(64*TIMING_ITERATIONS));
 }
-*/
+
 
 void testAPI(void) {
     u32 pieceLen, totalLen, dataLen;
@@ -1809,7 +1809,7 @@ void testAPI(void) {
         }
         /*
          * do the hashing in pieces of variable length:
-         */
+         
         NESSIEinit(&w);
         NESSIEadd(dataBuf, 8*dataLen, &w);
         NESSIEfinalize(&w, expectedDigest);
@@ -1824,7 +1824,7 @@ void testAPI(void) {
                 }
                 NESSIEfinalize(&w, computedDigest);
                 if (memcmp(computedDigest, expectedDigest, DIGESTBYTES) != 0) {
-                    fprintf(stderr, "API error @ pieceLen = %lu\n", pieceLen);
+                   // fprintf(stderr, "API error @ pieceLen = %lu\n", pieceLen);
                     display(computedDigest, DIGESTBYTES); printf("\n\n");
                     display(expectedDigest, DIGESTBYTES); printf("\n\n");
                     return;
@@ -1941,6 +1941,7 @@ static void makeIntermediateValues() {
 
     fflush(stdout);
 }
+*
 #endif /* ?TRACE_INTERMEDIATE_VALUES */
 
 

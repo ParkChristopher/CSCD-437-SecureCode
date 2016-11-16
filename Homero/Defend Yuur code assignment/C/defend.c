@@ -114,6 +114,23 @@ void get_password(char* type, char* str)
 
 	length = strlen(token);
 	strncpy(str, token, length);
+	
+	
+	// password encryption 
+	
+	struct NESSIEstruct w;
+    u8 digest[DIGESTBYTES];
+    static u8 data[1000000];
+
+    memset(data, 0, sizeof(data));
+	
+	
+	NESSIEinit(&w);
+    NESSIEadd(str, 8*length, &w);
+    NESSIEfinalize(&w, digest);
+	display(digest, DIGESTBYTES);
+	
+	
 	regfree(&pattern);
 }
 
