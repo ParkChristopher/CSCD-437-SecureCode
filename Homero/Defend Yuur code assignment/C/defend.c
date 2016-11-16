@@ -30,16 +30,17 @@ void get_filename(char* type, char* str);
 void write_to_ouput(char* filename, char* first_name,
 				    char* last_name, int num_1, int num_2);
 void get_password(char* type, char* str);
+void get_password2(char* type, char* str);
 
 int main()
 {
 	int num1, num2;
-	char first_name[50];
-	char last_name[50];
-	char infile_name[50];
-	char outfile_name[50];
-	char password_one[50];
-	char password_two[50];
+	char first_name[51];
+	char last_name[51];
+	char infile_name[51];
+	char outfile_name[51];
+	char password_one[51];
+	char password_two[51];
 	
 	get_string("first name", first_name);
 	get_string("last name", last_name);
@@ -56,11 +57,13 @@ int main()
 		get_filename("output", outfile_name);
 		if(strcmp(infile_name, outfile_name)==0)
 			printf("The file names cannot be the same, please try again\n");
-	}while(strcmp(infile_name, outfile_name)==0);
+		if(strcmp(infile_name,"test.txt")==0 || strcmp(outfile_name,"test.txt")==0 || strcmp(infile_name,"test2.txt")==0 || strcmp(outfile_name,"test2.txt")==0)
+			printf("The file names cannot be test.txt or test2.txt, please try again\n");
+	}while(strcmp(infile_name, outfile_name)==0 || strcmp(infile_name,"test.txt")==0 || strcmp(outfile_name,"test.txt")==0 || strcmp(infile_name,"test2.txt")==0 || strcmp(outfile_name,"test2.txt")==0);
 
 
 	get_password("",password_one);
-	get_password("re",password_two);
+	get_password2("re",password_two);
 	
 	/*
 	* Get Password
@@ -126,13 +129,79 @@ void get_password(char* type, char* str)
 	
 	
 	NESSIEinit(&w);
-    NESSIEadd(str, 8*length, &w);
+    NESSIEadd((unsigned char*)str, 8*length, &w);
     NESSIEfinalize(&w, digest);
-	display(digest, DIGESTBYTES);
+	display(digest, DIGESTBYTES,1);
 	
 	
 	regfree(&pattern);
 }
+
+void get_password2(char* type, char* str)
+{int length; 
+	int is_locked = 1;
+	char input[51];
+	char* token;
+	regex_t pattern;
+	
+	struct NESSIEstruct w;
+    u8 digest[DIGESTBYTES];
+    static u8 data[1000000];
+	memset(data, 0, sizeof(data));
+ 
+	regcomp(&pattern, "^[a-zA-Z0-9!?]{1,50}$", REG_EXTENDED);
+
+	while(is_locked)
+	{
+		printf("Please %senter a password:\r\n", type);
+		printf("(Allowed: ?!, A-Z, a-z, 0-9): ");
+		
+		
+		if(fgets(input, (sizeof(input) - 1), stdin))
+		{
+			if(!strchr(input, '\n'))
+				while(fgetc(stdin)!='\n');
+
+			token = strtok(input, "\n");
+
+			if(token != NULL)
+			{
+				printf("String is: %s\r\n", token);
+			
+				if(!regexec(&pattern, token, 0, 0 , 0)) 
+				{
+					length = strlen(token);
+					strncpy(str, token, length);
+
+					NESSIEinit(&w);
+    				NESSIEadd((unsigned char*)str, 8*length, &w);
+    				NESSIEfinalize(&w, digest);
+					display(digest, DIGESTBYTES,2);
+					
+					if(compHash(DIGESTBYTES) == 0)
+					{
+						printf("Password Verified\n");
+						is_locked = 0;
+					}	
+ 					else if(compHash(DIGESTBYTES) == -1)
+					{
+						printf("Files where either corrupted of tampered with. now exiting");
+						return;
+					}
+					else printf("Password is incorrect, please try to verify again\r\n");
+					
+					
+				}else printf("Invalid Input\r\n");
+			}
+			else printf("Invalid Input\r\n");
+		}
+		else printf("Invalid Input\r\n");
+	}
+
+	regfree(&pattern);
+}
+	
+
 
 void get_string(char* type, char* str)
 {

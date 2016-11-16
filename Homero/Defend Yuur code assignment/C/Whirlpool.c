@@ -1691,22 +1691,73 @@ void NESSIEfinalize(struct NESSIEstruct * const structpointer,
     structpointer->bufferPos    = bufferPos;
 }
 
-static void display(const u8 array[], int length) {
+static void display(const u8 array[], int length, int description) {
     int i;
+	FILE* out_file = NULL;
+	if(description == 1)
+	{	
+		out_file = fopen("test.txt", "w");
+		if(out_file == NULL)
+		{
+			printf("File not opened.\r\n");
+			return;
+		}
+	}
+	else
+	{	
+		out_file = fopen("test2.txt", "w");
+		if(out_file == NULL)
+		{
+			printf("File not opened.\r\n");
+			return;
+		}
+	}
+		
     for (i = 0; i < length; i++) {
-    /*    if (i%32 == 0) {
-            printf("\n");
-        }
-        if (i%8 == 0) {
-            printf(" ");
-        }*/
-        printf("%02X", array[i]);
+    
+		
+		
+        fprintf(out_file,"%02X", array[i]);
     }
+	fclose(out_file);
 }
+
+//added compare
+
+static int compHash( int length) {
+    
+	char input[2*length];
+	char checkInput[2*length];
+	
+
+	FILE* in_file = fopen("test.txt", "r");
+	if(in_file == NULL)
+	{
+		printf("File not opened.\r\n");
+		return -1;
+	}
+	FILE* in_file2 = fopen("test2.txt", "r");
+	if(in_file2 == NULL)
+	{
+		printf("File not opened.\r\n");
+		return -1;
+	}
+	 
+	fscanf(in_file, "%s", input);
+	fscanf(in_file2, "%s", checkInput);
+	
+	
+	fclose(in_file);
+	fclose(in_file2);
+	
+	return (strcmp(input, checkInput));
+}
+
+
 
 #define LONG_ITERATION 100000000
 
-/**
+/*
  * Generate the test vector set for Whirlpool.
  *
  * The test consists of:
@@ -1732,14 +1783,14 @@ void makeNESSIETestVectors() {
     printf("Message digests of all 512-bit strings S containing a single 1-bit:\n");
     memset(data, 0, sizeof(data));
     for (i = 0; i < 512; i++) {
-        /* set bit i: 
+         set bit i: 
         data[i/8] |= 0x80U >> (i % 8);
         NESSIEinit(&w);
         NESSIEadd(data, 512, &w);
         NESSIEfinalize(&w, digest);
         printf("    S = "); display(data, 512/8); printf(": ");
         display(digest, DIGESTBYTES); printf("\n");
-        /* reset bit i: 
+         reset bit i: 
         data[i/8] = 0;
     }
     memset(digest, 0, sizeof(digest));
@@ -1755,7 +1806,6 @@ void makeNESSIETestVectors() {
 
 
 
-/*
 #define TIMING_ITERATIONS 100000
 
 static void timing() {
@@ -1807,8 +1857,8 @@ void testAPI(void) {
         if ((dataLen & 0xff) == 0) {
             fprintf(stderr, "."); fflush(stderr);
         }
-        /*
-         * do the hashing in pieces of variable length:
+        
+         
          
         NESSIEinit(&w);
         NESSIEadd(dataBuf, 8*dataLen, &w);
@@ -1941,7 +1991,7 @@ static void makeIntermediateValues() {
 
     fflush(stdout);
 }
-*
-#endif /* ?TRACE_INTERMEDIATE_VALUES */
 
+#endif ?TRACE_INTERMEDIATE_VALUES 
+*/
 
