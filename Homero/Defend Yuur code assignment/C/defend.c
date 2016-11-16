@@ -53,13 +53,17 @@ int main()
 	
 	do
 	{
+		char test[51];
+		char test2[51];
+		sscanf("test.txt","%s", test);
+		sscanf("test2.txt","%s", test2);
 		get_filename("input", infile_name);
 		get_filename("output", outfile_name);
 		if(strcmp(infile_name, outfile_name)==0)
 			printf("The file names cannot be the same, please try again\n");
-		if(strcmp(infile_name,"test.txt")==0 || strcmp(outfile_name,"test.txt")==0 || strcmp(infile_name,"test2.txt")==0 || strcmp(outfile_name,"test2.txt")==0)
+		if(strcmp(infile_name,test)==0 || strcmp(outfile_name,test)==0 || strcmp(infile_name,test2)==0 || strcmp(outfile_name,test2)==0)
 			printf("The file names cannot be test.txt or test2.txt, please try again\n");
-	}while(strcmp(infile_name, outfile_name)==0 || strcmp(infile_name,"test.txt")==0 || strcmp(outfile_name,"test.txt")==0 || strcmp(infile_name,"test2.txt")==0 || strcmp(outfile_name,"test2.txt")==0);
+	}while(strcmp(infile_name, outfile_name)==0 || strcmp(infile_name,test)==0 || strcmp(outfile_name,test)==0 || strcmp(infile_name,test2)==0 || strcmp(outfile_name,test2)==0);
 
 
 	get_password("",password_one);
