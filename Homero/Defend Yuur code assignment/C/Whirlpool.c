@@ -1750,7 +1750,18 @@ static int compHash( int length) {
 	fclose(in_file);
 	fclose(in_file2);
 	
-	return (strcmp(input, checkInput));
+	length = 2*length;
+	for(int i = 1; i < length;i++)
+	{
+		if(input[i]	!= checkInput[i])
+		{
+			
+			return 1;
+		}	
+	}
+	
+	
+	return 0;
 }
 
 

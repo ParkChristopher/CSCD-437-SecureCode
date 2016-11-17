@@ -41,6 +41,8 @@ int main()
 	char outfile_name[51];
 	char password_one[51];
 	char password_two[51];
+	char test[51];
+	char test2[51];
 	
 	get_string("first name", first_name);
 	get_string("last name", last_name);
@@ -53,8 +55,7 @@ int main()
 	
 	do
 	{
-		char test[51];
-		char test2[51];
+		
 		sscanf("test.txt","%s", test);
 		sscanf("test2.txt","%s", test2);
 		get_filename("input", infile_name);
