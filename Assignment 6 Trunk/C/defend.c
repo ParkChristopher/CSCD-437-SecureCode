@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
+#include <sys/stat.h>
 
 #define  MAX_STRING 60
 
@@ -293,6 +294,24 @@ int can_use_nums(int num1,int num2)
 open input file
 read characters into buffer, set a maximum buffer full check
 */
+void read_from_input(char * filename)
+{
+	FILE* in_file = fopen(filename, "r");
+	char* input_data;
+	struct stat st;
+	off_t size;
+
+	if(in_file == NULL) printf("Input file not opened\r\n");
+
+	stat(filename, &st);
+	size = st.st_size;
+	input_data = malloc(size);
+
+
+
+	
+
+}
 
 /*
 * Write To Output
@@ -302,7 +321,7 @@ void write_to_ouput(char* filename, char* first_name,
 {
 	FILE* out_file = fopen(filename, "a");
 
-	if(out_file == NULL) printf("File not opened.\r\n");
+	if(out_file == NULL) printf("Output file not opened.\r\n");
 
 	printf("%s", filename);
 	/*Ouput name*/
